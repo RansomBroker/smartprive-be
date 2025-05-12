@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Level {
+  guru
+  admin
+  siswa
+}
+
+enum Status {
+  H
+  I
+  S
+}
+
+model Prestasi {
+  id Int @id @default(autoincrement())
+  name String
+  user  User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId Int
+  createdAt DateTime @default(now())
+}
+
+model Absensi {
+  id Int @id @default(autoincrement())
+  user  User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId Int
+  absensiDate DateTime @default(now())
+  status Status
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  username String @unique
+  name String @unique
+  password String
+  level Level
+  nohp String?
+  alamat String?
+  createdAt DateTime @default(now())
+  prestasis Prestasi[]
+  absesnsis Absensi[]
+}
+
+
+
+
+
