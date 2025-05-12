@@ -1,6 +1,13 @@
 import { prisma } from "@/lib/prisma";
+import { authMiddleware } from "@/app/middleware/middleware";
 
-export async function GET() {
+export async function GET(req) {
+  const auth = await authMiddleware(req);
+
+  if (!auth) {
+    return Response.json({ error: "Unauthorized" }, { status: auth.status });
+  }
+
   try {
     const prestasiData = await prisma.prestasi.findMany({
       include: { user: true },
@@ -13,6 +20,10 @@ export async function GET() {
 }
 
 export async function POST(req) {
+  const auth = await authMiddleware(req);
+  if (!auth) {
+    return Response.json({ error: "Unauthorized" }, { status: auth.status });
+  }
   const body = await req.json();
 
   try {

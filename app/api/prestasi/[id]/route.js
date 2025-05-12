@@ -1,6 +1,11 @@
 import { prisma } from "@/lib/prisma";
+import { authMiddleware } from "@/app/middleware/middleware";
 
 export async function GET(_, { params }) {
+  const auth = await authMiddleware(_);
+  if (!auth) {
+    return Response.json({ error: "Unauthorized" }, { status: auth.status });
+  }
   try {
     const prestasi = await prisma.prestasi.findUnique({
       where: { id: parseInt(params.id) },
@@ -21,6 +26,12 @@ export async function GET(_, { params }) {
 }
 
 export async function PUT(req, { params }) {
+  const auth = await authMiddleware(req);
+
+  if (!auth) {
+    return Response.json({ error: "Unauthorized" }, { status: auth.status });
+  }
+
   const body = await req.json();
 
   try {
