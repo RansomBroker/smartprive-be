@@ -21,10 +21,28 @@ export async function POST(req) {
   }
 
   const token = jwt.sign(
-    { userId: user.id, username: user.username, level: user.level },
+    {
+      id: user.id,
+      username: user.username,
+      level: user.level,
+      nohp: user.nohp,
+      alamat: user.alamat,
+    },
     SECRET_KEY,
     { expiresIn: "1h" }
   );
 
-  return Response.json({ token });
+  return Response.json(
+    {
+      token: token,
+      user: {
+        id: user.id,
+        username: user.username,
+        level: user.level,
+        nohp: user.nohp,
+        alamat: user.alamat,
+      },
+    },
+    { status: 200 }
+  );
 }
