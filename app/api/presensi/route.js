@@ -10,7 +10,7 @@ export async function GET(req) {
 
   try {
     const data = await prisma.absensi.findMany({
-      include: { user: true },
+      include: { user: true, absent_by: true },
       orderBy: { absensiDate: "desc" },
     });
     return Response.json(data);
@@ -40,6 +40,7 @@ export async function POST(req) {
       userId: item.userId,
       status: item.status,
       absensiDate: item.absensiDate ? new Date(item.absensiDate) : undefined,
+      absentById: item.absentById,
     }));
 
     const result = await prisma.absensi.createMany({ data: dataToInsert });
