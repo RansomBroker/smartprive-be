@@ -1,19 +1,54 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-1.1.x"]
 }
 
-
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
+}
+
+model Prestasi {
+  id        Int      @id @default(autoincrement())
+  name      String
+  userId    Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Absensi {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  absensiDate DateTime @default(now())
+  status      Status
+  createdAt   DateTime @default(now())
+  absentById  Int
+  absent_by   User     @relation("AbsentBy", fields: [absentById], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id         Int        @id @default(autoincrement())
+  username   String     @unique
+  name       String     @unique
+  password   String
+  level      Level
+  nohp       String?
+  alamat     String?
+  createdAt  DateTime   @default(now())
+  kelas      String?
+  AbsenEntry Absensi[]  @relation("AbsentBy")
+  absesnsis  Absensi[]
+  prestasis  Prestasi[]
+}
+
+model Soal {
+  id        Int    @id @default(autoincrement())
+  link_soal String
+  kelas     String
+  judul     String
+  mapel     String
 }
 
 enum Level {
@@ -27,42 +62,3 @@ enum Status {
   I
   S
 }
-
-model Prestasi {
-  id Int @id @default(autoincrement())
-  name String
-  user  User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId Int
-  createdAt DateTime @default(now())
-}
-
-model Absensi {
-  id Int @id @default(autoincrement())
-  user  User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId Int
-  absensiDate DateTime @default(now())
-  status Status
-  absent_by User @relation("AbsentBy", fields: [absentById], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  absentById Int
-  createdAt DateTime @default(now())
-}
-
-model User {
-  id Int @id @default(autoincrement())
-  username String @unique
-  name String @unique
-  password String
-  level Level
-  kelas String?
-  nohp String?
-  alamat String?
-  createdAt DateTime @default(now())
-  prestasis Prestasi[]
-  absesnsis Absensi[]
-  AbsenEntry Absensi[] @relation("AbsentBy")
-}
-
-
-
-
-
