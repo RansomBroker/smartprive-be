@@ -1,3 +1,51 @@
+# Petunjuk Menjalankan Proyek (Bahasa Indonesia)
+
+## 1. Persiapan Environment
+
+1. Duplikat file `.env.example` menjadi `.env` (jika belum ada, buat file `.env` baru).
+2. Isi variabel berikut di file `.env` Anda:
+
+```
+DATABASE_URL=postgresql://<username>:<password>@<host>:<port>/<database>
+DIRECT_URL=postgresql://<username>:<password>@<host>:<port>/<database>
+```
+
+Ganti `<username>`, `<password>`, `<host>`, `<port>`, dan `<database>` sesuai dengan konfigurasi database Supabase Anda.
+
+## 2. Install Dependency
+
+```bash
+npm install
+```
+
+## 3. Jalankan Migrasi Database
+
+```bash
+npx prisma migrate deploy
+```
+
+Atau untuk development:
+
+```bash
+npx prisma migrate dev
+```
+
+## 4. Jalankan Seeder (Menambah User Admin)
+
+```bash
+npm run seed
+```
+
+## 5. (Opsional) Reset Data
+
+Untuk menghapus seluruh data di database:
+
+```bash
+npm run reset
+```
+
+---
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
