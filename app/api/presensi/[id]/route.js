@@ -24,6 +24,42 @@ export async function GET(_, { params }) {
   }
 }
 
+export async function POST(req) {
+  const auth = await authMiddleware(req);
+
+  if (!auth) {
+    return Response.json({ error: "Unauthorized" }, { status: auth.status });
+  }
+
+  const body = await req.json();
+  const { userId, bulan, data } = body;
+
+  try {
+    const [year, month] = bulan.split("-").map(Number);
+
+    const created = await Promise.all(
+      data
+        .filter((entry) => entry.h || entry.i || entry.s)
+        .map((entry) => {
+          const status = entry.h ? "H" : entry.i ? "I" : "S";
+          const absensiDate = new Date(year, month - 1, entry.dayOfMonth);
+
+          return prisma.absensi.create({
+            data: {
+              userId,
+              status,
+              absensiDate,
+            },
+          });
+        })
+    );
+
+    return Response.json({ message: "Absensi berhasil disimpan", data: created });
+  } catch (error) {
+    return Response.json({ error: error.message }, { status: 400 });
+  }
+}
+
 export async function PUT(req, { params }) {
   const auth = await authMiddleware(req);
 

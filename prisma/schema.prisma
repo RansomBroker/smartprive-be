@@ -9,12 +9,16 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Prestasi {
+model Rapot {
   id        Int      @id @default(autoincrement())
-  name      String
+  mapel     String
+  bab       String
+  nilai     Int
+  semester  String?   
+  catatan   String?   
   userId    Int
+  user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Absensi {
@@ -40,7 +44,7 @@ model User {
   kelas      String?
   AbsenEntry Absensi[]  @relation("AbsentBy")
   absesnsis  Absensi[]
-  prestasis  Prestasi[]
+  rapotis     Rapot[]
 }
 
 model Soal {

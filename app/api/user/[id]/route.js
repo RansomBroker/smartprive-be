@@ -13,7 +13,7 @@ export async function GET(_, { params }) {
   const user = await prisma.user.findUnique({
     where: { id },
     include: {
-      prestasis: true,
+      rapotis: true,
       absesnsis: true,
     },
   });
@@ -31,7 +31,7 @@ export async function PUT(req, { params }) {
 
   const id = parseInt(params.id);
   const body = await req.json();
-  const { username, name, password, level, nohp, alamat } = body;
+  const { username, name, password, level, nohp, alamat, kelas = "" } = body;
 
   try {
     const updated = await prisma.user.update({
@@ -43,6 +43,7 @@ export async function PUT(req, { params }) {
         level,
         nohp,
         alamat,
+        kelas,
       },
     });
     return Response.json(updated);

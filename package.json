@@ -11,7 +11,7 @@
     "reset": "node prisma/reset.js"
   },
   "dependencies": {
-    "@prisma/client": "^6.7.0",
+    "@prisma/client": "^6.9.0",
     "bcryptjs": "^3.0.2",
     "dotenv": "^16.5.0",
     "jsonwebtoken": "^9.0.2",
@@ -23,6 +23,6 @@
     "@eslint/eslintrc": "^3",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
-    "prisma": "^6.7.0"
+    "prisma": "^6.9.0"
   }
 }

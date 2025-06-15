@@ -11,7 +11,7 @@ export async function GET(req) {
 
   const users = await prisma.user.findMany({
     include: {
-      prestasis: true,
+      rapotis: true,
       absesnsis: true,
     },
   });
@@ -28,7 +28,7 @@ export async function POST(req) {
   const body = await req.json();
   const hashedPassword = await bcrypt.hash(body.password, 10);
   body.password = hashedPassword;
-  const { username, name, password, level, nohp, alamat } = body;
+  const { username, name, password, level, nohp, alamat, kelas = "" } = body;
 
   try {
     const newUser = await prisma.user.create({
@@ -39,6 +39,7 @@ export async function POST(req) {
         level,
         nohp,
         alamat,
+        kelas,
       },
     });
     return Response.json(newUser, { status: 201 });

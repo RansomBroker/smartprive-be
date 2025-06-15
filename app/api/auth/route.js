@@ -27,6 +27,7 @@ export async function POST(req) {
       level: user.level,
       nohp: user.nohp,
       alamat: user.alamat,
+      nama: user.nama,
     },
     SECRET_KEY,
     { expiresIn: "1h" }
