@@ -9,12 +9,10 @@ export async function GET(req) {
     return Response.json({ error: "Unauthorized" }, { status: auth.status });
   }
 
+  console.log("Prisma User Model Keys:", Object.keys(prisma.user.fields));
+
   const users = await prisma.user.findMany({
-    include: {
-      rapots: true,
-      absensis: true,
-      prestasis: true,
-    },
+    include: {},
   });
   return Response.json(users);
 }
