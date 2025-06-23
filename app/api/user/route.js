@@ -11,8 +11,9 @@ export async function GET(req) {
 
   const users = await prisma.user.findMany({
     include: {
-      rapotis: true,
-      absesnsis: true,
+      rapots: true,
+      absensis: true,
+      prestasis: true,
     },
   });
   return Response.json(users);

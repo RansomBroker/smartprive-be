@@ -30,17 +30,19 @@ export async function PUT(req, { params }) {
   }
 
   const body = await req.json();
-
   try {
     const updatedRapot = await prisma.rapot.update({
       where: { id: parseInt(params.id) },
       data: {
-        siswa_id: body.siswa_id,
+        userId: body.userId ? parseInt(body.userId) : undefined,
         mapel: body.mapel,
         nilai: body.nilai,
         bab: body.bab,
         semester: body.semester,
         catatan: body.catatan,
+      },
+      include: {
+        user: true,
       },
     });
 
@@ -50,7 +52,12 @@ export async function PUT(req, { params }) {
   }
 }
 
-export async function DELETE(_, { params }) {
+export async function DELETE(req, { params }) {
+  const auth = await authMiddleware(req);
+  if (!auth) {
+    return Response.json({ error: "Unauthorized" }, { status: auth.status });
+  }
+
   try {
     await prisma.rapot.delete({
       where: { id: parseInt(params.id) },
